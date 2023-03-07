@@ -76,7 +76,7 @@ def getTunedModel( baseModel ):
         'classifier__max_samples': sp_randFloat()
         }
     print(random_grid)
-    model_tuned = RandomizedSearchCV(cv=5, estimator = baseModel, param_distributions = random_grid, n_iter = 10, verbose=1, random_state=random_state , n_jobs = -1)
+    model_tuned = RandomizedSearchCV(cv=5, estimator = baseModel, param_distributions = random_grid, n_iter = 1, verbose=1, random_state=random_state , n_jobs = -1)
     return model_tuned
 
 

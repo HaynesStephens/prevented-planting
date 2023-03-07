@@ -83,51 +83,51 @@ def getTunedModel( baseModel ):
 
 
 zir_tuned = getTunedModel(zir)
-# # Run tuning to find optimal hyperparameters
-# zir_tuned.fit(train_features,train_labels)
+# Run tuning to find optimal hyperparameters
+zir_tuned.fit(train_features,train_labels)
 
 
-# ## Select best parameters and fit model
-# result = pd.DataFrame.from_dict(zir_tuned.cv_results_)
-# # Choose the best hyperparameters from the random CV search.
-# best = result[result.rank_test_score == 1]
-# key = list(best.params.keys())[0]
-# best_params = dict(best.params)[key]
-# best_params
+## Select best parameters and fit model
+result = pd.DataFrame.from_dict(zir_tuned.cv_results_)
+# Choose the best hyperparameters from the random CV search.
+best = result[result.rank_test_score == 1]
+key = list(best.params.keys())[0]
+best_params = dict(best.params)[key]
+best_params
 
 
-# # Create a new model instance with the optimal hyperparameters.
-# zir_opt = ZeroInflatedRegressor(
-#     classifier=RandomForestClassifier(
-#         random_state=42, criterion=classifier_criterion,
-#         n_estimators = best_params['classifier__n_estimators'],
-#         max_samples = best_params['classifier__max_samples'],
-#         min_samples_leaf = best_params['classifier__min_samples_leaf'],
-#         max_depth = best_params['classifier__max_depth'],
-#         ),
-#     regressor=RandomForestRegressor(
-#         random_state=42, criterion=regressor_criterion, 
-#         n_estimators = best_params['regressor__n_estimators'], 
-#         max_samples = best_params['regressor__max_samples'], 
-#         min_samples_leaf = best_params['regressor__min_samples_leaf'],
-#         max_depth = best_params['regressor__max_depth']
-#         )
-# )
+# Create a new model instance with the optimal hyperparameters.
+zir_opt = ZeroInflatedRegressor(
+    classifier=RandomForestClassifier(
+        random_state=42, criterion=classifier_criterion,
+        n_estimators = best_params['classifier__n_estimators'],
+        max_samples = best_params['classifier__max_samples'],
+        min_samples_leaf = best_params['classifier__min_samples_leaf'],
+        max_depth = best_params['classifier__max_depth'],
+        ),
+    regressor=RandomForestRegressor(
+        random_state=42, criterion=regressor_criterion, 
+        n_estimators = best_params['regressor__n_estimators'], 
+        max_samples = best_params['regressor__max_samples'], 
+        min_samples_leaf = best_params['regressor__min_samples_leaf'],
+        max_depth = best_params['regressor__max_depth']
+        )
+)
 
-# zir_opt.fit(train_features, train_labels)
-# y_pred = zir_opt.predict(train_features)
+zir_opt.fit(train_features, train_labels)
+y_pred = zir_opt.predict(train_features)
 
 
-# # Add performance metrics to the blurb output.
-# blurb = 'ZIR model (split train-test):'
-# blurb = blurb + '\nGoodness of Fit (R2): {0}'.format(metrics.r2_score(train_labels, y_pred))
-# blurb = blurb + '\nMean Absolute Error (MAE): {0}'.format(metrics.mean_absolute_error(train_labels, y_pred))
-# blurb = blurb + '\nMean Squared Error (MSE): {0}'.format(metrics.mean_squared_error(train_labels, y_pred))
-# blurb = blurb + '\nRoot Mean Squared Error (RMSE): {0}'.format(np.sqrt(metrics.mean_squared_error(train_labels, y_pred)))
-# mape = np.mean(np.abs((train_labels - y_pred) / np.abs(train_labels+0.001)))
-# blurb = blurb + '\nMean Absolute Percentage Error (MAPE): {0}'.format(round(mape * 100, 2))
-# blurb = blurb + '\nAccuracy: {0}'.format(round(100*(1 - mape), 2))
-# print(blurb)
+# Add performance metrics to the blurb output.
+blurb = 'ZIR model (split train-test):'
+blurb = blurb + '\nGoodness of Fit (R2): {0}'.format(metrics.r2_score(train_labels, y_pred))
+blurb = blurb + '\nMean Absolute Error (MAE): {0}'.format(metrics.mean_absolute_error(train_labels, y_pred))
+blurb = blurb + '\nMean Squared Error (MSE): {0}'.format(metrics.mean_squared_error(train_labels, y_pred))
+blurb = blurb + '\nRoot Mean Squared Error (RMSE): {0}'.format(np.sqrt(metrics.mean_squared_error(train_labels, y_pred)))
+mape = np.mean(np.abs((train_labels - y_pred) / np.abs(train_labels+0.001)))
+blurb = blurb + '\nMean Absolute Percentage Error (MAPE): {0}'.format(round(mape * 100, 2))
+blurb = blurb + '\nAccuracy: {0}'.format(round(100*(1 - mape), 2))
+print(blurb)
 
 
 # # Create unique filename for model run.

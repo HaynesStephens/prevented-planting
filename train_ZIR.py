@@ -41,45 +41,48 @@ feature_list=list(df_features.columns)
 features=np.array(df_features)
 
 
-# # # TAKE SOME YEARS OUT OF TRAINING
-# # excl_years = [2019]
-# # features, labels = features[~df.year.isin(excl_years)], labels[~df.year.isin(excl_years)]
-# # RANDOM SPLIT
-# train_features, test_features, train_labels, test_labels = train_test_split(features, labels, 
-#                                                                             test_size=0.20, random_state = 42, shuffle = True)
-# # # YEAR SPLIT
-# # test_years = [2019]
-# # train_features, test_features, train_labels, test_labels = (features[~df.year.isin(test_years)], features[df.year.isin(test_years)],
-# #                                                             labels[~df.year.isin(test_years)], labels[df.year.isin(test_years)])
+# # TAKE SOME YEARS OUT OF TRAINING
+# excl_years = [2019]
+# features, labels = features[~df.year.isin(excl_years)], labels[~df.year.isin(excl_years)]
+# RANDOM SPLIT
+train_features, test_features, train_labels, test_labels = train_test_split(features, 
+                                                                            labels, 
+                                                                            test_size=0.20, 
+                                                                            random_state = 42, 
+                                                                            shuffle = True)
+# # YEAR SPLIT
+# test_years = [2019]
+# train_features, test_features, train_labels, test_labels = (features[~df.year.isin(test_years)], features[df.year.isin(test_years)],
+#                                                             labels[~df.year.isin(test_years)], labels[df.year.isin(test_years)])
 
 
-# # Create a reference model to be tuned.
-# classifier_criterion='gini'
-# regressor_criterion='squared_error'
-# zir = ZeroInflatedRegressor(
-#     classifier=RandomForestClassifier(random_state=42, criterion=classifier_criterion),
-#     regressor=RandomForestRegressor(random_state=42, criterion=regressor_criterion)
-# )
+# Create a reference model to be tuned.
+classifier_criterion='gini'
+regressor_criterion='squared_error'
+zir = ZeroInflatedRegressor(
+    classifier=RandomForestClassifier(random_state=42, criterion=classifier_criterion),
+    regressor=RandomForestRegressor(random_state=42, criterion=regressor_criterion)
+)
 
 
-# def getTunedModel( baseModel ):
-#     random_state = 42
-#     random_grid = {
-#         'regressor__n_estimators': sp_randInt(100, 801),
-#         'regressor__min_samples_leaf': sp_randInt(10, 51),
-#         'regressor__max_depth': sp_randInt(10, 41),
-#         'regressor__max_samples': sp_randFloat(),
-#         'classifier__n_estimators': sp_randInt(100, 801),
-#         'classifier__min_samples_leaf': sp_randInt(10, 51),
-#         'classifier__max_depth': sp_randInt(10, 41),
-#         'classifier__max_samples': sp_randFloat()
-#         }
-#     print(random_grid)
-#     model_tuned = RandomizedSearchCV(cv=5, estimator = baseModel, param_distributions = random_grid, n_iter = 1, verbose=1, random_state=random_state , n_jobs = -1)
-#     return model_tuned
+def getTunedModel( baseModel ):
+    random_state = 42
+    random_grid = {
+        'regressor__n_estimators': sp_randInt(100, 801),
+        'regressor__min_samples_leaf': sp_randInt(10, 51),
+        'regressor__max_depth': sp_randInt(10, 41),
+        'regressor__max_samples': sp_randFloat(),
+        'classifier__n_estimators': sp_randInt(100, 801),
+        'classifier__min_samples_leaf': sp_randInt(10, 51),
+        'classifier__max_depth': sp_randInt(10, 41),
+        'classifier__max_samples': sp_randFloat()
+        }
+    print(random_grid)
+    model_tuned = RandomizedSearchCV(cv=5, estimator = baseModel, param_distributions = random_grid, n_iter = 1, verbose=1, random_state=random_state , n_jobs = -1)
+    return model_tuned
 
 
-# zir_tuned = getTunedModel(zir)
+zir_tuned = getTunedModel(zir)
 # # Run tuning to find optimal hyperparameters
 # zir_tuned.fit(train_features,train_labels)
 

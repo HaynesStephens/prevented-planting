@@ -1,7 +1,6 @@
 # imports
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 import datetime
 import pickle
 import os
@@ -15,7 +14,7 @@ from scipy.stats import uniform as sp_randFloat
 from scipy.stats import randint as sp_randInt
 
 
-df = pd.read_csv('/content/drive/Shareddrives/NRT Practicum - Winter 2022/Prevented Planting/Data/Processed/traindata-corn-excessmoist.csv')
+df = pd.read_csv('/project2/moyer/ag_data/prevented-planting/traindata-corn-excessmoist.csv')
 df['fips'] = df.fips.astype(str).str.zfill(5)
 df['region'] = df.region.astype(str).str.zfill(5)
 # Set values above 1.0 to 1.0
@@ -66,11 +65,11 @@ zir = ZeroInflatedRegressor(
 def getTunedModel( baseModel ):
     random_state = 42
     random_grid = {
-        'regressor__n_estimators': sp_randInt(100, 501),
+        'regressor__n_estimators': sp_randInt(100, 801),
         'regressor__min_samples_leaf': sp_randInt(10, 51),
         'regressor__max_depth': sp_randInt(10, 41),
         'regressor__max_samples': sp_randFloat(),
-        'classifier__n_estimators': sp_randInt(100, 501),
+        'classifier__n_estimators': sp_randInt(100, 801),
         'classifier__min_samples_leaf': sp_randInt(10, 51),
         'classifier__max_depth': sp_randInt(10, 41),
         'classifier__max_samples': sp_randFloat()
@@ -98,24 +97,26 @@ best_params
 zir_opt = ZeroInflatedRegressor(
     classifier=RandomForestClassifier(
         random_state=42, criterion=classifier_criterion,
-        n_estimators = clas_params['n_estimators'],
-        max_samples = clas_params['max_samples'],
-        min_samples_leaf = clas_params['min_samples_leaf'],
-        max_depth = clas_params['max_depth'],
+        n_estimators = best_params['classifier__n_estimators'],
+        max_samples = best_params['classifier__max_samples'],
+        min_samples_leaf = best_params['classifier__min_samples_leaf'],
+        max_depth = best_params['classifier__max_depth'],
         ),
     regressor=RandomForestRegressor(
         random_state=42, criterion=regressor_criterion, 
-        n_estimators = regr_params['n_estimators'], 
-        max_samples = regr_params['max_samples'], 
-        min_samples_leaf = regr_params['min_samples_leaf'],
-        max_depth = regr_params['max_depth']
+        n_estimators = best_params['regressor__n_estimators'], 
+        max_samples = best_params['regressor__max_samples'], 
+        min_samples_leaf = best_params['regressor__min_samples_leaf'],
+        max_depth = best_params['regressor__max_depth']
         )
 )
+
 zir_opt.fit(train_features, train_labels)
 y_pred = zir_opt.predict(train_features)
 
+
 # Add performance metrics to the blurb output.
-blurb = 'ZIR model (split-train test):'
+blurb = 'ZIR model (split train-test):'
 blurb = blurb + '\nGoodness of Fit (R2): {0}'.format(metrics.r2_score(train_labels, y_pred))
 blurb = blurb + '\nMean Absolute Error (MAE): {0}'.format(metrics.mean_absolute_error(train_labels, y_pred))
 blurb = blurb + '\nMean Squared Error (MSE): {0}'.format(metrics.mean_squared_error(train_labels, y_pred))
@@ -132,7 +133,7 @@ def get_file_id():
     fileid = '{0}-{1}-{2}'.format(str(now.year).zfill(4), str(now.month).zfill(2), str(now.day).zfill(2))
     return fileid
 filename = 'ZIR-' + get_file_id()
-savedir = '/content/drive/Shareddrives/NRT Practicum - Winter 2022/Prevented Planting/Models/ZIR/'+filename
+savedir = '/project2/moyer/ag_data/prevented-planting/Models/ZIR/'+filename
 
 
 # Create new directory for model run and save blurb.

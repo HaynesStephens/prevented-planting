@@ -41,115 +41,115 @@ feature_list=list(df_features.columns)
 features=np.array(df_features)
 
 
-# # TAKE SOME YEARS OUT OF TRAINING
-# excl_years = [2019]
-# features, labels = features[~df.year.isin(excl_years)], labels[~df.year.isin(excl_years)]
-# RANDOM SPLIT
-train_features, test_features, train_labels, test_labels = train_test_split(features, labels, 
-                                                                            test_size=0.20, random_state = 42, shuffle = True)
-# # YEAR SPLIT
-# test_years = [2019]
-# train_features, test_features, train_labels, test_labels = (features[~df.year.isin(test_years)], features[df.year.isin(test_years)],
-#                                                             labels[~df.year.isin(test_years)], labels[df.year.isin(test_years)])
+# # # TAKE SOME YEARS OUT OF TRAINING
+# # excl_years = [2019]
+# # features, labels = features[~df.year.isin(excl_years)], labels[~df.year.isin(excl_years)]
+# # RANDOM SPLIT
+# train_features, test_features, train_labels, test_labels = train_test_split(features, labels, 
+#                                                                             test_size=0.20, random_state = 42, shuffle = True)
+# # # YEAR SPLIT
+# # test_years = [2019]
+# # train_features, test_features, train_labels, test_labels = (features[~df.year.isin(test_years)], features[df.year.isin(test_years)],
+# #                                                             labels[~df.year.isin(test_years)], labels[df.year.isin(test_years)])
 
 
-# Create a reference model to be tuned.
-classifier_criterion='gini'
-regressor_criterion='squared_error'
-zir = ZeroInflatedRegressor(
-    classifier=RandomForestClassifier(random_state=42, criterion=classifier_criterion),
-    regressor=RandomForestRegressor(random_state=42, criterion=regressor_criterion)
-)
+# # Create a reference model to be tuned.
+# classifier_criterion='gini'
+# regressor_criterion='squared_error'
+# zir = ZeroInflatedRegressor(
+#     classifier=RandomForestClassifier(random_state=42, criterion=classifier_criterion),
+#     regressor=RandomForestRegressor(random_state=42, criterion=regressor_criterion)
+# )
 
 
-def getTunedModel( baseModel ):
-    random_state = 42
-    random_grid = {
-        'regressor__n_estimators': sp_randInt(100, 801),
-        'regressor__min_samples_leaf': sp_randInt(10, 51),
-        'regressor__max_depth': sp_randInt(10, 41),
-        'regressor__max_samples': sp_randFloat(),
-        'classifier__n_estimators': sp_randInt(100, 801),
-        'classifier__min_samples_leaf': sp_randInt(10, 51),
-        'classifier__max_depth': sp_randInt(10, 41),
-        'classifier__max_samples': sp_randFloat()
-        }
-    print(random_grid)
-    model_tuned = RandomizedSearchCV(cv=5, estimator = baseModel, param_distributions = random_grid, n_iter = 1, verbose=1, random_state=random_state , n_jobs = -1)
-    return model_tuned
+# def getTunedModel( baseModel ):
+#     random_state = 42
+#     random_grid = {
+#         'regressor__n_estimators': sp_randInt(100, 801),
+#         'regressor__min_samples_leaf': sp_randInt(10, 51),
+#         'regressor__max_depth': sp_randInt(10, 41),
+#         'regressor__max_samples': sp_randFloat(),
+#         'classifier__n_estimators': sp_randInt(100, 801),
+#         'classifier__min_samples_leaf': sp_randInt(10, 51),
+#         'classifier__max_depth': sp_randInt(10, 41),
+#         'classifier__max_samples': sp_randFloat()
+#         }
+#     print(random_grid)
+#     model_tuned = RandomizedSearchCV(cv=5, estimator = baseModel, param_distributions = random_grid, n_iter = 1, verbose=1, random_state=random_state , n_jobs = -1)
+#     return model_tuned
 
 
-zir_tuned = getTunedModel(zir)
-# Run tuning to find optimal hyperparameters
-zir_tuned.fit(train_features,train_labels)
+# zir_tuned = getTunedModel(zir)
+# # Run tuning to find optimal hyperparameters
+# zir_tuned.fit(train_features,train_labels)
 
 
-## Select best parameters and fit model
-result = pd.DataFrame.from_dict(zir_tuned.cv_results_)
-# Choose the best hyperparameters from the random CV search.
-best = result[result.rank_test_score == 1]
-key = list(best.params.keys())[0]
-best_params = dict(best.params)[key]
-best_params
+# ## Select best parameters and fit model
+# result = pd.DataFrame.from_dict(zir_tuned.cv_results_)
+# # Choose the best hyperparameters from the random CV search.
+# best = result[result.rank_test_score == 1]
+# key = list(best.params.keys())[0]
+# best_params = dict(best.params)[key]
+# best_params
 
 
-# Create a new model instance with the optimal hyperparameters.
-zir_opt = ZeroInflatedRegressor(
-    classifier=RandomForestClassifier(
-        random_state=42, criterion=classifier_criterion,
-        n_estimators = best_params['classifier__n_estimators'],
-        max_samples = best_params['classifier__max_samples'],
-        min_samples_leaf = best_params['classifier__min_samples_leaf'],
-        max_depth = best_params['classifier__max_depth'],
-        ),
-    regressor=RandomForestRegressor(
-        random_state=42, criterion=regressor_criterion, 
-        n_estimators = best_params['regressor__n_estimators'], 
-        max_samples = best_params['regressor__max_samples'], 
-        min_samples_leaf = best_params['regressor__min_samples_leaf'],
-        max_depth = best_params['regressor__max_depth']
-        )
-)
+# # Create a new model instance with the optimal hyperparameters.
+# zir_opt = ZeroInflatedRegressor(
+#     classifier=RandomForestClassifier(
+#         random_state=42, criterion=classifier_criterion,
+#         n_estimators = best_params['classifier__n_estimators'],
+#         max_samples = best_params['classifier__max_samples'],
+#         min_samples_leaf = best_params['classifier__min_samples_leaf'],
+#         max_depth = best_params['classifier__max_depth'],
+#         ),
+#     regressor=RandomForestRegressor(
+#         random_state=42, criterion=regressor_criterion, 
+#         n_estimators = best_params['regressor__n_estimators'], 
+#         max_samples = best_params['regressor__max_samples'], 
+#         min_samples_leaf = best_params['regressor__min_samples_leaf'],
+#         max_depth = best_params['regressor__max_depth']
+#         )
+# )
 
-zir_opt.fit(train_features, train_labels)
-y_pred = zir_opt.predict(train_features)
-
-
-# Add performance metrics to the blurb output.
-blurb = 'ZIR model (split train-test):'
-blurb = blurb + '\nGoodness of Fit (R2): {0}'.format(metrics.r2_score(train_labels, y_pred))
-blurb = blurb + '\nMean Absolute Error (MAE): {0}'.format(metrics.mean_absolute_error(train_labels, y_pred))
-blurb = blurb + '\nMean Squared Error (MSE): {0}'.format(metrics.mean_squared_error(train_labels, y_pred))
-blurb = blurb + '\nRoot Mean Squared Error (RMSE): {0}'.format(np.sqrt(metrics.mean_squared_error(train_labels, y_pred)))
-mape = np.mean(np.abs((train_labels - y_pred) / np.abs(train_labels+0.001)))
-blurb = blurb + '\nMean Absolute Percentage Error (MAPE): {0}'.format(round(mape * 100, 2))
-blurb = blurb + '\nAccuracy: {0}'.format(round(100*(1 - mape), 2))
-print(blurb)
+# zir_opt.fit(train_features, train_labels)
+# y_pred = zir_opt.predict(train_features)
 
 
-# Create unique filename for model run.
-def get_file_id():
-    now = datetime.datetime.now()
-    fileid = '{0}-{1}-{2}'.format(str(now.year).zfill(4), str(now.month).zfill(2), str(now.day).zfill(2))
-    return fileid
-filename = 'ZIR-' + get_file_id()
-savedir = '/project2/moyer/ag_data/prevented-planting/Models/ZIR/'+filename
+# # Add performance metrics to the blurb output.
+# blurb = 'ZIR model (split train-test):'
+# blurb = blurb + '\nGoodness of Fit (R2): {0}'.format(metrics.r2_score(train_labels, y_pred))
+# blurb = blurb + '\nMean Absolute Error (MAE): {0}'.format(metrics.mean_absolute_error(train_labels, y_pred))
+# blurb = blurb + '\nMean Squared Error (MSE): {0}'.format(metrics.mean_squared_error(train_labels, y_pred))
+# blurb = blurb + '\nRoot Mean Squared Error (RMSE): {0}'.format(np.sqrt(metrics.mean_squared_error(train_labels, y_pred)))
+# mape = np.mean(np.abs((train_labels - y_pred) / np.abs(train_labels+0.001)))
+# blurb = blurb + '\nMean Absolute Percentage Error (MAPE): {0}'.format(round(mape * 100, 2))
+# blurb = blurb + '\nAccuracy: {0}'.format(round(100*(1 - mape), 2))
+# print(blurb)
 
 
-# Create new directory for model run and save blurb.
-os.mkdir(savedir)
-with open(savedir+'/run_notes.txt', 'w') as f:
-    f.write(blurb)
-with open(savedir+'/feature_list.pkl', 'wb') as f:
-    pickle.dump(feature_list, f)
-# Save fitted model.
-filepath = savedir+'/'+filename+'.pkl'
-pickle.dump(zir_opt, open(filepath, 'wb'))
-# Predict historical data and add to dataset.
-df['pred'] = zir_opt.predict(np.array(df[feature_list]))
-df['pred_cl'] = zir_opt.classifier_.predict(np.array(df[feature_list])).astype(int)
-df['pred_re'] = zir_opt.regressor_.predict(np.array(df[feature_list]))
+# # Create unique filename for model run.
+# def get_file_id():
+#     now = datetime.datetime.now()
+#     fileid = '{0}-{1}-{2}'.format(str(now.year).zfill(4), str(now.month).zfill(2), str(now.day).zfill(2))
+#     return fileid
+# filename = 'ZIR-' + get_file_id()
+# savedir = '/project2/moyer/ag_data/prevented-planting/Models/ZIR/'+filename
 
 
-# Save new dataframe with saved model.
-df.to_csv(savedir+'/predictionsa-fldas.csv',index=False)
+# # Create new directory for model run and save blurb.
+# os.mkdir(savedir)
+# with open(savedir+'/run_notes.txt', 'w') as f:
+#     f.write(blurb)
+# with open(savedir+'/feature_list.pkl', 'wb') as f:
+#     pickle.dump(feature_list, f)
+# # Save fitted model.
+# filepath = savedir+'/'+filename+'.pkl'
+# pickle.dump(zir_opt, open(filepath, 'wb'))
+# # Predict historical data and add to dataset.
+# df['pred'] = zir_opt.predict(np.array(df[feature_list]))
+# df['pred_cl'] = zir_opt.classifier_.predict(np.array(df[feature_list])).astype(int)
+# df['pred_re'] = zir_opt.regressor_.predict(np.array(df[feature_list]))
+
+
+# # Save new dataframe with saved model.
+# df.to_csv(savedir+'/predictionsa-fldas.csv',index=False)

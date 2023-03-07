@@ -130,29 +130,29 @@ blurb = blurb + '\nAccuracy: {0}'.format(round(100*(1 - mape), 2))
 print(blurb)
 
 
-# # Create unique filename for model run.
-# def get_file_id():
-#     now = datetime.datetime.now()
-#     fileid = '{0}-{1}-{2}'.format(str(now.year).zfill(4), str(now.month).zfill(2), str(now.day).zfill(2))
-#     return fileid
-# filename = 'ZIR-' + get_file_id()
-# savedir = '/project2/moyer/ag_data/prevented-planting/Models/ZIR/'+filename
+# Create unique filename for model run.
+def get_file_id():
+    now = datetime.datetime.now()
+    fileid = '{0}-{1}-{2}'.format(str(now.year).zfill(4), str(now.month).zfill(2), str(now.day).zfill(2))
+    return fileid
+filename = 'ZIR-' + get_file_id()
+savedir = '/project2/moyer/ag_data/prevented-planting/Models/ZIR/'+filename
 
 
-# # Create new directory for model run and save blurb.
-# os.mkdir(savedir)
-# with open(savedir+'/run_notes.txt', 'w') as f:
-#     f.write(blurb)
-# with open(savedir+'/feature_list.pkl', 'wb') as f:
-#     pickle.dump(feature_list, f)
-# # Save fitted model.
-# filepath = savedir+'/'+filename+'.pkl'
-# pickle.dump(zir_opt, open(filepath, 'wb'))
-# # Predict historical data and add to dataset.
-# df['pred'] = zir_opt.predict(np.array(df[feature_list]))
-# df['pred_cl'] = zir_opt.classifier_.predict(np.array(df[feature_list])).astype(int)
-# df['pred_re'] = zir_opt.regressor_.predict(np.array(df[feature_list]))
+# Create new directory for model run and save blurb.
+os.mkdir(savedir)
+with open(savedir+'/run_notes.txt', 'w') as f:
+    f.write(blurb)
+with open(savedir+'/feature_list.pkl', 'wb') as f:
+    pickle.dump(feature_list, f)
+# Save fitted model.
+filepath = savedir+'/'+filename+'.pkl'
+pickle.dump(zir_opt, open(filepath, 'wb'))
+# Predict historical data and add to dataset.
+df['pred'] = zir_opt.predict(np.array(df[feature_list]))
+df['pred_cl'] = zir_opt.classifier_.predict(np.array(df[feature_list])).astype(int)
+df['pred_re'] = zir_opt.regressor_.predict(np.array(df[feature_list]))
 
 
-# # Save new dataframe with saved model.
-# df.to_csv(savedir+'/predictionsa-fldas.csv',index=False)
+# Save new dataframe with saved model.
+df.to_csv(savedir+'/predictionsa-fldas.csv',index=False)

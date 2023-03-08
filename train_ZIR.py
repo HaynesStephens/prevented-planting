@@ -146,7 +146,7 @@ with open(savedir+'/run_notes.txt', 'w') as f:
 with open(savedir+'/feature_list.pkl', 'wb') as f:
     pickle.dump(feature_list, f)
 # Save fitted model.
-filepath = savedir+'/'+filename+'.pkl'
+filepath = savedir+'/model.pkl'
 pickle.dump(zir_opt, open(filepath, 'wb'))
 # Predict historical data and add to dataset.
 df['pred'] = zir_opt.predict(np.array(df[feature_list]))
@@ -155,4 +155,4 @@ df['pred_re'] = zir_opt.regressor_.predict(np.array(df[feature_list]))
 
 
 # Save new dataframe with saved model.
-df.to_csv(savedir+'/predictionsa-fldas.csv',index=False)
+df.to_csv(savedir+'/predictions-fldas.csv',index=False)

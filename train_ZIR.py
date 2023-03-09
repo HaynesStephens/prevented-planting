@@ -81,7 +81,6 @@ def getTunedModel( baseModel ):
     model_tuned = RandomizedSearchCV(cv=5, estimator = baseModel, param_distributions = random_grid, n_iter = 25, verbose=1, random_state=random_state , n_jobs = -1)
     return model_tuned
 
-hell yea
 
 zir_tuned = getTunedModel(zir)
 # Run tuning to find optimal hyperparameters

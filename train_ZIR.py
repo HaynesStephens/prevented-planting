@@ -68,12 +68,12 @@ zir = ZeroInflatedRegressor(
 def getTunedModel( baseModel ):
     random_state = 42
     random_grid = {
-        'regressor__n_estimators': sp_randInt(100, 801),
-        'regressor__min_samples_leaf': sp_randInt(10, 51),
+        'regressor__n_estimators': sp_randInt(10, 801),
+        'regressor__min_samples_leaf': sp_randInt(1, 51),
         'regressor__max_depth': sp_randInt(10, 41),
         'regressor__max_samples': sp_randFloat(),
-        'classifier__n_estimators': sp_randInt(100, 801),
-        'classifier__min_samples_leaf': sp_randInt(10, 51),
+        'classifier__n_estimators': sp_randInt(10, 801),
+        'classifier__min_samples_leaf': sp_randInt(1, 51),
         'classifier__max_depth': sp_randInt(10, 41),
         'classifier__max_samples': sp_randFloat()
         }

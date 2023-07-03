@@ -14,6 +14,7 @@ from sklego.meta import ZeroInflatedRegressor
 from scipy.stats import uniform as sp_randFloat
 from scipy.stats import randint as sp_randInt
 
+random_state = 42
 
 df = pd.read_csv('/project2/moyer/ag_data/prevented-planting/traindata-corn-excessmoist.csv')
 df['fips'] = df.fips.astype(str).str.zfill(5)
@@ -49,7 +50,7 @@ features=np.array(df_features)
 train_features, test_features, train_labels, test_labels = train_test_split(features, 
                                                                             labels, 
                                                                             test_size=0.20, 
-                                                                            random_state = 42, 
+                                                                            random_state = random_state, 
                                                                             shuffle = True)
 # # YEAR SPLIT
 # test_years = [2019]
@@ -61,13 +62,13 @@ train_features, test_features, train_labels, test_labels = train_test_split(feat
 classifier_criterion='gini'
 regressor_criterion='squared_error'
 zir = ZeroInflatedRegressor(
-    classifier=RandomForestClassifier(random_state=42, criterion=classifier_criterion),
-    regressor=RandomForestRegressor(random_state=42, criterion=regressor_criterion)
+    classifier=RandomForestClassifier(random_state=random_state, criterion=classifier_criterion),
+    regressor=RandomForestRegressor(random_state=random_state, criterion=regressor_criterion)
 )
 
 
 def getTunedModel( baseModel ):
-    random_state = 42
+    random_state = random_state
     random_grid = {
         'regressor__n_estimators': sp_randInt(10, 801),
         'regressor__min_samples_leaf': sp_randInt(1, 51),
@@ -100,14 +101,14 @@ best_params
 # Create a new model instance with the optimal hyperparameters.
 zir_opt = ZeroInflatedRegressor(
     classifier=RandomForestClassifier(
-        random_state=42, criterion=classifier_criterion,
+        random_state=random_state, criterion=classifier_criterion,
         n_estimators = best_params['classifier__n_estimators'],
         max_samples = best_params['classifier__max_samples'],
         min_samples_leaf = best_params['classifier__min_samples_leaf'],
         max_depth = best_params['classifier__max_depth'],
         ),
     regressor=RandomForestRegressor(
-        random_state=42, criterion=regressor_criterion, 
+        random_state=random_state, criterion=regressor_criterion, 
         n_estimators = best_params['regressor__n_estimators'], 
         max_samples = best_params['regressor__max_samples'], 
         min_samples_leaf = best_params['regressor__min_samples_leaf'],

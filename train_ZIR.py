@@ -29,13 +29,13 @@ df = df[~df.state.isin(state_exc_100lon)]
 labels = np.array(df['ppfrac'])
 months_incl = np.array([1,2,3,4,5,6])
 months_excl = np.array([month for month in np.arange(1,13) if month not in months_incl])
-weather_vars = ['evaptrans_','runsurf_','rain_','tempair_','watersoil_','tempsoil_']
+weather_vars = ['evaptrans_','runsurf_','runsub','rain_','tempair_','watersoil_','tempsoil_']
 weather_vars = [var+str(month).zfill(2) for var in weather_vars for month in months_incl]
-cst_vars = ['frac_tile_drained', 'fips', 'lat', 'lon',
-            'awc_mean_0_5', #'awc_mean_5_15', 'awc_mean_15_30', 'awc_mean_30_60', 'awc_mean_60_100', 
-            'om_mean_0_5', #'om_mean_5_15', 'om_mean_15_30', 'om_mean_30_60', 'om_mean_60_100',
-            'clay_mean_0_5', #'clay_mean_5_15', 'clay_mean_15_30', 'clay_mean_30_60', 'clay_mean_60_100', 
-            'ksat_mean_0_5']#, 'ksat_mean_5_15', 'ksat_mean_15_30', 'ksat_mean_30_60', 'ksat_mean_60_100']
+cst_vars = ['frac_tile_drained', 'lat', 'lon', #'fips'
+            'awc_mean_0_5', 'awc_mean_5_15', 'awc_mean_15_30', 'awc_mean_30_60', 'awc_mean_60_100', 
+            'om_mean_0_5', 'om_mean_5_15', 'om_mean_15_30', 'om_mean_30_60', 'om_mean_60_100',
+            'clay_mean_0_5', 'clay_mean_5_15', 'clay_mean_15_30', 'clay_mean_30_60', 'clay_mean_60_100', 
+            'ksat_mean_0_5', 'ksat_mean_5_15', 'ksat_mean_15_30', 'ksat_mean_30_60', 'ksat_mean_60_100']
 df_features = df[cst_vars+weather_vars]
 print(df_features.columns)
 feature_list=list(df_features.columns)
@@ -115,8 +115,8 @@ zir_opt = ZeroInflatedRegressor(
         )
 )
 
-zir_opt.fit(train_features, train_labels)
-y_pred = zir_opt.predict(train_features)
+zir_opt.fit(features, labels)
+y_pred = zir_opt.predict(features)
 
 
 # Add performance metrics to the blurb output.
@@ -140,11 +140,13 @@ def get_file_id():
 filename = 'ZIR-' + get_file_id()
 savedir = '/project2/moyer/ag_data/prevented-planting/Models/ZIR/'+filename
 
-
 # Create new directory for model run and save blurb.
 os.mkdir(savedir)
 with open(savedir+'/run_notes.txt', 'w') as f:
     f.write(blurb)
+    f.write('\n\n')
+    for item in feature_list:
+        f.write("{0}\n".format(item))
 with open(savedir+'/feature_list.pkl', 'wb') as f:
     pickle.dump(feature_list, f)
 # Save fitted model.

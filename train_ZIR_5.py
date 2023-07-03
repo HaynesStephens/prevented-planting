@@ -30,7 +30,7 @@ df = df[~df.state.isin(state_exc_100lon)]
 labels = np.array(df['ppfrac'])
 months_incl = np.array([1,2,3,4,5,6])
 months_excl = np.array([month for month in np.arange(1,13) if month not in months_incl])
-weather_vars = ['evaptrans_','runsurf_','runsub','rain_','tempair_','watersoil_','tempsoil_']
+weather_vars = ['evaptrans_','runsurf_','runsub_','rain_','tempair_','watersoil_','tempsoil_']
 weather_vars = [var+str(month).zfill(2) for var in weather_vars for month in months_incl]
 cst_vars = ['frac_tile_drained', 'lat', 'lon', #'fips'
             'awc_mean_0_5', 'awc_mean_5_15', 'awc_mean_15_30', 'awc_mean_30_60', 'awc_mean_60_100', 

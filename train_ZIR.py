@@ -122,6 +122,7 @@ y_pred = zir_opt.predict(features)
 
 # Add performance metrics to the blurb output.
 blurb = 'ZIR model (split train-test): 25-iter CV'
+blurb = blurb + '\nRandom State: {0}'.format(random_state)
 blurb = blurb + '\nGoodness of Fit (R2): {0}'.format(metrics.r2_score(labels, y_pred))
 blurb = blurb + '\nMean Absolute Error (MAE): {0}'.format(metrics.mean_absolute_error(labels, y_pred))
 blurb = blurb + '\nMean Squared Error (MSE): {0}'.format(metrics.mean_squared_error(labels, y_pred))

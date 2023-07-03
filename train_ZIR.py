@@ -135,8 +135,8 @@ print(blurb)
 # Create unique filename for model run.
 def get_file_id():
     now = datetime.datetime.now(pytz.timezone('US/Pacific'))
-    fileid = '{0}-{1}-{2}-{3}-{4}'.format(str(now.year).zfill(4), str(now.month).zfill(2), str(now.day).zfill(2), 
-                                          str(now.hour).zfill(2), str(now.minute).zfill(2))
+    fileid = '{0}-{1}-{2}-{3}-{4}-{5}'.format(str(now.year).zfill(4), str(now.month).zfill(2), str(now.day).zfill(2), 
+                                          str(now.hour).zfill(2), str(now.minute).zfill(2), str(now.second).zfill(2))
     return fileid
 filename = 'ZIR-' + get_file_id()
 savedir = '/project2/moyer/ag_data/prevented-planting/Models/ZIR/'+filename

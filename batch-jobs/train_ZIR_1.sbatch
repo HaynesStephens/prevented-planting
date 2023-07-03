@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#SBATCH --job-name=train_ZIR_newseed
-#SBATCH --output=train_ZIR_newseed.out
-#SBATCH --error=train_ZIR_newseed.err
+#SBATCH --job-name=train_ZIR_1
+#SBATCH --output=train_ZIR_1.out
+#SBATCH --error=train_ZIR_1.err
 #SBATCH --ntasks=1
 #SBATCH --partition=broadwl
 #SBATCH --cpus-per-task=1
@@ -12,4 +12,4 @@
 #SBATCH --mail-user=haynes13@uchicago.edu
 
 source activate /home/haynes13/.conda/envs/prevplant
-python /home/haynes13/code/prevented-planting/train_ZIR_newseed.py
+python /home/haynes13/code/prevented-planting/train_ZIR_1.py

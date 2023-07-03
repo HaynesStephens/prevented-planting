@@ -67,8 +67,7 @@ zir = ZeroInflatedRegressor(
 )
 
 
-def getTunedModel( baseModel ):
-    random_state = random_state
+def getTunedModel( baseModel, random_state ):
     random_grid = {
         'regressor__n_estimators': sp_randInt(10, 801),
         'regressor__min_samples_leaf': sp_randInt(1, 51),
@@ -84,7 +83,7 @@ def getTunedModel( baseModel ):
     return model_tuned
 
 
-zir_tuned = getTunedModel(zir)
+zir_tuned = getTunedModel( zir, random_state )
 # Run tuning to find optimal hyperparameters
 zir_tuned.fit(train_features,train_labels)
 

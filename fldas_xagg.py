@@ -44,7 +44,7 @@ if __name__=='__main__':
     print('\n')
 
     print('OPEN FLDAS')
-    for year in np.arange(2022,2023):
+    for year in np.arange(1982,2023):
         print(year, 'OPENING')
         ds = getFLDAS(year).sel( lat=slice(24,50), lon=slice(-107,-66) )
         print('opened.')

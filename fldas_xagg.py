@@ -41,8 +41,9 @@ if __name__=='__main__':
 
     print('OPEN FLDAS')
     for year in np.arange(2022,2023):
-        ds = getFLDAS()
-        print(year, 'opened.')
+        print(year, 'OPENING')
+        ds = getFLDAS(year)
+        print('opened.')
 
     # print('CREATE WEIGHTMAP')
     # weightmap = xa.pixel_overlaps( da, geodf, weights=maizearea )

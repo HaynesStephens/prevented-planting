@@ -14,7 +14,7 @@ def getFLDAS(year):
     newnames = ['evaptrans', 'runsurf', 'runsub', 'rain', 'tempair', 'watersoil', 'tempsoil']
     namedict = dict(zip(oldnames+['X','Y'], newnames+['lon','lat']))
     ds = xr.open_mfdataset(fullfilename)
-    # ds = ds[oldnames].rename(namedict)
+    ds = ds[oldnames].rename(namedict)
     return ds
 
 def getGDF():
@@ -45,10 +45,10 @@ if __name__=='__main__':
         ds = getFLDAS(year)
         print('opened.')
 
-    # print('CREATE WEIGHTMAP')
-    # weightmap = xa.pixel_overlaps( da, geodf, weights=maizearea )
-    # print('AGGREGATE DATA')
-    # aggregated = xa.aggregate( da, weightmap )
+    print('CREATE WEIGHTMAP')
+    weightmap = xa.pixel_overlaps( ds, geodf )
+    print('AGGREGATE DATA')
+    aggregated = xa.aggregate( ds, weightmap )
     # print('CREATE DATAFRAME')
     # df = reformat(aggregated, varname)
     # print('SAVE DF')

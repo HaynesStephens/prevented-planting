@@ -5,15 +5,22 @@ import geopandas as gpd
 import xarray as xr
 
 
-def getFLDAS():
-    dirPath = '/project2/moyer/ag_data/fldas'
-    fileName = 'FLDAS_NOAH01_C_GL_M.*.nc'
+def getFLDAS(year):
+    dirPath = '/project2/moyer/ag_data/fldas/'
+    fileName = 'FLDAS_NOAH01_C_GL_M.{0}*.nc'.format(year)
     fullfilename = dirPath+fileName
     print(fullfilename)
-    return xr.open_mfdataset(fullfilename)
+    oldnames = ['Evap_tavg', 'Qs_tavg', 'Qsb_tavg', 'Rainf_f_tavg', 'Tair_f_tavg', 'SoilMoi00_10cm_tavg', 'SoilTemp00_10cm_tavg']
+    newnames = ['evaptrans', 'runsurf', 'runsub', 'rain', 'tempair', 'watersoil', 'tempsoil']
+    namedict = dict(zip(oldnames+['X','Y'], newnames+['lon','lat']))
+    ds = xr.open_mfdataset(fullfilename)
+    # ds = ds[oldnames].rename(namedict)
+    return ds
 
 def getGDF():
     gdf = gpd.read_file( '/project2/moyer/ag_data/cb_2021_us_county_500k/' )
+    state_exc_100lon = ['HI','AK','WA','OR','CA','ID','NV','AZ','MT','WY','UT','CO','NM','AS', 'MP', 'PR', 'DC', 'GU','VI']
+    gdf = gdf[~gdf.STUSPS.isin(state_exc_100lon)]
     return gdf
 
 
@@ -33,8 +40,9 @@ if __name__=='__main__':
     print('\n')
 
     print('OPEN FLDAS')
-    da = getFLDAS()#.sel(time=slice('1982', '2022'))
-    print('opened.')
+    for year in np.arange(2022,2023):
+        ds = getFLDAS()
+        print(year, 'opened.')
 
     # print('CREATE WEIGHTMAP')
     # weightmap = xa.pixel_overlaps( da, geodf, weights=maizearea )

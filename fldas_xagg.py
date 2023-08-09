@@ -21,15 +21,19 @@ def getGDF():
     gdf = gpd.read_file( '/project2/moyer/ag_data/cb_2021_us_county_500k/' )
     state_exc_100lon = ['HI','AK','WA','OR','CA','ID','NV','AZ','MT','WY','UT','CO','NM','AS', 'MP', 'PR', 'DC', 'GU','VI']
     gdf = gdf[~gdf.STUSPS.isin(state_exc_100lon)]
+    gdf = gdf[['STUSPS','GEOID','geometry']]
     return gdf
 
 
-def reformat(aggregated_subset, varname, start_date='1982-01-01'):
-    df          = aggregated_subset.to_dataframe().melt(id_vars=['disID' , 'state' , 'district' ,'statename'])
-    df['date']  = pd.to_datetime(start_date) + pd.to_timedelta(df.variable.str.lstrip(varname).astype(int), unit='D')
-    df          = df.drop('variable', 1).rename(columns={'value':varname})
-    df['Year']  = df.date.dt.year
-    df['doy']   = df.date.dt.dayofyear
+def reformat(aggregated_subset, year):
+    df = aggregated_subset.to_dataframe()
+    df['year'] = year
+    names = ['evaptrans', 'runsurf', 'runsub', 'rain', 'tempair', 'watersoil', 'tempsoil']
+    for name in names:
+        oldcols = ['{0}{1}'.format(name,str(i)) for i in range(12)] # Original column names output
+        newcols = ['{0}_{1}'.format(name,str(i+1).zfill(2)) for i in range(12)] # New month column names
+        df = df.rename(columns=dict(zip(oldcols, newcols)))
+    df = df.rename(columns={'GEOID':'fips'})
     return df
 
 
@@ -40,21 +44,21 @@ if __name__=='__main__':
     print('\n')
 
     print('OPEN FLDAS')
-    for year in np.arange(2022,2023):
+    for year in np.arange(1982,2023):
         print(year, 'OPENING')
         ds = getFLDAS(year).sel( lat=slice(24,50), lon=slice(-107,-66) )
         print('opened.')
 
-    print('CREATE WEIGHTMAP')
-    weightmap = xa.pixel_overlaps( ds, geodf )
-    print('AGGREGATE DATA')
-    aggregated = xa.aggregate( ds, weightmap )
-    df = aggregated.to_dataframe().to_csv('/project2/moyer/ag_data/fldas/_test.csv'.format(year))
-    # print('CREATE DATAFRAME')
-    # df = reformat(aggregated, varname)
-    # print('SAVE DF')
-    # df = df.drop_duplicates()
-    # # df.to_csv('/project2/moyer/ag_data/growing-seasons/ggcmi-regrid/{0}_T6.csv'.format(varname), index=False)
-    # print('COMPLETE.\n')
+        print('CREATE WEIGHTMAP')
+        weightmap = xa.pixel_overlaps( ds, geodf )
+        print('AGGREGATE DATA')
+        aggregated = xa.aggregate( ds, weightmap )
+        df = aggregated.to_dataframe().to_csv('/project2/moyer/ag_data/fldas/_test.csv'.format(year))
+        print('CREATE DATAFRAME')
+        df = reformat(aggregated, year)
+        print('SAVE DF')
+        df = df.drop_duplicates()
+        df.to_csv('/project2/moyer/ag_data/fldas/fldas_{0}.csv'.format(year), index=False)
+        print('COMPLETE.\n')
 
 

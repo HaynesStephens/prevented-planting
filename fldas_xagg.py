@@ -49,6 +49,7 @@ if __name__=='__main__':
     weightmap = xa.pixel_overlaps( ds, geodf )
     print('AGGREGATE DATA')
     aggregated = xa.aggregate( ds, weightmap )
+    df = aggregated.to_dataframe().to_csv('/project2/moyer/ag_data/fldas/_test.csv'.format(year))
     # print('CREATE DATAFRAME')
     # df = reformat(aggregated, varname)
     # print('SAVE DF')

@@ -7,7 +7,7 @@ import xarray as xr
 
 def getFLDAS(year):
     dirPath = '/project2/moyer/ag_data/fldas/'
-    fileName = 'FLDAS_NOAH01_C_GL_M.{0}*.nc'.format(year)
+    fileName = 'FLDAS_NOAH01_C_GL_M.A{0}*.nc'.format(year)
     fullfilename = dirPath+fileName
     print(fullfilename)
     oldnames = ['Evap_tavg', 'Qs_tavg', 'Qsb_tavg', 'Rainf_f_tavg', 'Tair_f_tavg', 'SoilMoi00_10cm_tavg', 'SoilTemp00_10cm_tavg']

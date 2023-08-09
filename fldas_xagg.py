@@ -58,7 +58,7 @@ if __name__=='__main__':
         df = reformat(aggregated, year)
         print('SAVE DF')
         df = df.drop_duplicates()
-        df.to_csv('/project2/moyer/ag_data/fldas/fldas_{0}.csv'.format(year), index=False)
+        df.to_csv('/project2/moyer/ag_data/fldas/fldas_county_{0}.csv'.format(year), index=False)
         print('COMPLETE.\n')
 
 

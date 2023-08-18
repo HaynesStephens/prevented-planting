@@ -2,19 +2,9 @@
 import numpy as np
 import pandas as pd
 import pickle
-import os
-import time
 import sklearn
-from sklearn import metrics
-from sklearn.svm import SVC
-from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.model_selection import cross_val_score, RandomizedSearchCV, train_test_split
 from sklego.meta import ZeroInflatedRegressor
-import xgboost as xgb
-import os, json, fnmatch, xarray as xr, numpy as np, plotly.express as px, pandas as pd, matplotlib.pyplot as plt
-import matplotlib as mpl
-from urllib.request import urlopen
 import shap
 
 def load_model(modeltype, filename):

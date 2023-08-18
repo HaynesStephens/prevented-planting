@@ -14,17 +14,17 @@ def load_model(modeltype, filename):
 
 modeltype = 'ZIR'
 filename = "ZIR-2023-08-15-15-39-06"
-figdir = '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/'.format(modeltype, filename)
+modeldir = '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/'.format(modeltype, filename)
 model = load_model(modeltype, filename)
 
 feature_list = pickle.load(open(
-    '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/feature_list.pkl'.format(modeltype, filename),
+    modeldir+'feature_list.pkl'.format(modeltype, filename),
     'rb'
 ))
 
 # Historical
 output = pd.read_csv(
-    '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/predictions-fldas.csv'.format(modeltype, filename)
+    modeldir+'predictions-fldas.csv'.format(modeltype, filename)
 )
 output['fips'] = output.fips.astype(str).str.zfill(5)
 output['pred_tot'] = output.pred * output.Total
@@ -62,7 +62,7 @@ def saveShapleys(input_data, feature_list, model_in):
     return out
 
 shap_class = saveShapleys(output, feature_list, model.classifier_)
-shap_class.to_csv('shap_class.csv',index=False)
+shap_class.to_csv(modeldir+'shap_class.csv',index=False)
 
 shap_regr = saveShapleys(output, feature_list, model.regressor_)
-shap_regr.to_csv('shap_regr.csv',index=False)
+shap_regr.to_csv(modeldir+'shap_regr.csv',index=False)

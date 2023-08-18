@@ -29,8 +29,6 @@ output = pd.read_csv(
 output['fips'] = output.fips.astype(str).str.zfill(5)
 output['pred_tot'] = output.pred * output.Total
 
-output = output[:30]
-
 features_df = output[feature_list]
 
 def saveShapleys(input_data, feature_list, model_in):
@@ -61,8 +59,11 @@ def saveShapleys(input_data, feature_list, model_in):
     print('Complete.')
     return out
 
-shap_class = saveShapleys(output, feature_list, model.classifier_)
-shap_class.to_csv(modeldir+'shap_class.csv',index=False)
+for year in np.sort(output.year.unique()):
+    print('Year')
 
-shap_regr = saveShapleys(output, feature_list, model.regressor_)
-shap_regr.to_csv(modeldir+'shap_regr.csv',index=False)
+    shap_class = saveShapleys(output, feature_list, model.classifier_)
+    shap_class.to_csv(modeldir+'shap_class.csv',index=False)
+
+    shap_regr = saveShapleys(output, feature_list, model.regressor_)
+    shap_regr.to_csv(modeldir+'shap_regr.csv',index=False)

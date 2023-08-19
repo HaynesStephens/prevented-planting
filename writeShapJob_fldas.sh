@@ -27,4 +27,5 @@ for year in "${years[@]}"; do
     # Execute the generated script
     # "sbatch $script"
 done
+done done
 

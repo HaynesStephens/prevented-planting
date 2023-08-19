@@ -1,4 +1,7 @@
 # imports
+import sys
+decade_start = sys.argv[1]
+
 import numpy as np
 import pandas as pd
 import pickle
@@ -59,11 +62,13 @@ def saveShapleys(input_data, feature_list, model_in):
     print('Complete.')
     return out
 
-for year in np.sort(output.year.unique()):
-    print('Year')
+print('Decade: {0}-{1}'.format(decade_start,decade_start+9))
+decade_range = np.arange(decade_start,decade_start+10)
+output = output[output.year.isin(decade_range)]
+output = output[:20]
 
-    shap_class = saveShapleys(output, feature_list, model.classifier_)
-    shap_class.to_csv(modeldir+'shap_class.csv',index=False)
+shap_class = saveShapleys(output, feature_list, model.classifier_)
+shap_class.to_csv(modeldir+'shap_class.csv',index=False)
 
-    shap_regr = saveShapleys(output, feature_list, model.regressor_)
-    shap_regr.to_csv(modeldir+'shap_regr.csv',index=False)
+shap_regr = saveShapleys(output, feature_list, model.regressor_)
+shap_regr.to_csv(modeldir+'shap_regr.csv',index=False)

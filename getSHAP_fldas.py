@@ -67,6 +67,7 @@ print('Decade: {0}-{1}'.format(decade_start,decade_start+9))
 decade_range = np.arange(decade_start,decade_start+10)
 output = output[output.year.isin(decade_range)]
 output = output[:20]
+output = output.reset_index(drop=True)
 
 shap_class = saveShapleys(output, feature_list, model.classifier_)
 shap_class.to_csv(modeldir+'shap_class_{0}-{1}.csv'.format(decade_start,decade_start+9),index=False)

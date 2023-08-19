@@ -1,7 +1,7 @@
 # imports
 # Here we go
 import sys
-decade_start = sys.argv[1]
+decade_start = int(sys.argv[1])
 
 import numpy as np
 import pandas as pd

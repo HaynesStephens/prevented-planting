@@ -69,7 +69,7 @@ output = output[output.year.isin(decade_range)]
 output = output[:20]
 
 shap_class = saveShapleys(output, feature_list, model.classifier_)
-shap_class.to_csv(modeldir+'shap_class.csv',index=False)
+shap_class.to_csv(modeldir+'shap_class_{0}-{1}.csv'.format(decade_start,decade_start+9),index=False)
 
 shap_regr = saveShapleys(output, feature_list, model.regressor_)
-shap_regr.to_csv(modeldir+'shap_regr.csv',index=False)
+shap_regr.to_csv(modeldir+'shap_regr_{0}-{1}.csv'.format(decade_start,decade_start+9),index=False)

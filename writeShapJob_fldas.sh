@@ -20,11 +20,11 @@ python /home/haynes13/code/prevented-planting/getSHAP_fldas.py \$YEAR
 years=(1996 2006 2016)
 
 for year in "${years[@]}"; do
-    script="ShapJob_fldas_${year}.sh"
+    script="ShapJob_fldas_${year}.sbatch"
     echo -e "$template" | sed "s/\$YEAR/$year/g" > "$script"
     chmod +x "$script"
     
     # Execute the generated script
-    # "./$script"
+    # "sbatch $script"
 done
 

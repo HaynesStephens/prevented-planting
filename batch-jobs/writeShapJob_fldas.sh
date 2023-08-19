@@ -25,5 +25,5 @@ for year in "${years[@]}"; do
     chmod +x "$script"
     
     # Execute the generated script
-    # "sbatch $script"
+    "sbatch $script"
 done

@@ -15,13 +15,13 @@ Index(['frac_tile_drained', 'lat', 'lon', 'awc_mean_0_5', 'awc_mean_5_15',
        'tempsoil_02', 'tempsoil_03', 'tempsoil_04', 'tempsoil_05',
        'tempsoil_06'],
       dtype='object')
-{'regressor__n_estimators': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7fd32515a160>, 'regressor__min_samples_leaf': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7fd32515a5b0>, 'regressor__max_depth': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7fd32515a760>, 'regressor__max_samples': <scipy.stats._distn_infrastructure.rv_continuous_frozen object at 0x7fd32515aa00>, 'classifier__n_estimators': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7fd32515ad00>, 'classifier__min_samples_leaf': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7fd32515afa0>, 'classifier__max_depth': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7fd32515ab20>, 'classifier__max_samples': <scipy.stats._distn_infrastructure.rv_continuous_frozen object at 0x7fd324f891f0>}
+{'regressor__n_estimators': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7ff83840a160>, 'regressor__min_samples_leaf': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7ff83840a5b0>, 'regressor__max_depth': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7ff83840a760>, 'regressor__max_samples': <scipy.stats._distn_infrastructure.rv_continuous_frozen object at 0x7ff83840aa00>, 'classifier__n_estimators': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7ff83840ad00>, 'classifier__min_samples_leaf': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7ff83840afa0>, 'classifier__max_depth': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7ff83840ab20>, 'classifier__max_samples': <scipy.stats._distn_infrastructure.rv_continuous_frozen object at 0x7ff8382321f0>}
 Fitting 5 folds for each of 25 candidates, totalling 125 fits
 ZIR model (split train-test): 25-iter CV
-Random State: 0
-Goodness of Fit (R2): 0.6469852967457097
-Mean Absolute Error (MAE): 0.009645937249111726
-Mean Squared Error (MSE): 0.0013899929754973978
-Root Mean Squared Error (RMSE): 0.03728260955857835
-Mean Absolute Percentage Error (MAPE): 122.76
-Accuracy: -22.76
+Random State: 6
+Goodness of Fit (R2): 0.7475897457866669
+Mean Absolute Error (MAE): 0.008113567731718329
+Mean Squared Error (MSE): 0.0009938636466575602
+Root Mean Squared Error (RMSE): 0.031525603034003334
+Mean Absolute Percentage Error (MAPE): 83.92
+Accuracy: 16.08

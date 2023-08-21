@@ -1,0 +1,11 @@
+Decade: 2016-2025
+Model type:  <class 'sklearn.ensemble._forest.RandomForestClassifier'>
+Loading Explainer.
+Getting shap values.
+Composing output df.
+Complete.
+Model type:  <class 'sklearn.ensemble._forest.RandomForestRegressor'>
+Loading Explainer.
+Getting shap values.
+Composing output df.
+Complete.

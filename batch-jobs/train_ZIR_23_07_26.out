@@ -1,0 +1,22 @@
+Index(['frac_tile_drained', 'lat', 'lon', 'awc_mean', 'om_mean', 'clay_mean',
+       'ksat_mean', 'evaptrans_01', 'evaptrans_02', 'evaptrans_03',
+       'evaptrans_04', 'evaptrans_05', 'evaptrans_06', 'runsurf_01',
+       'runsurf_02', 'runsurf_03', 'runsurf_04', 'runsurf_05', 'runsurf_06',
+       'runsub_01', 'runsub_02', 'runsub_03', 'runsub_04', 'runsub_05',
+       'runsub_06', 'rain_01', 'rain_02', 'rain_03', 'rain_04', 'rain_05',
+       'rain_06', 'tempair_01', 'tempair_02', 'tempair_03', 'tempair_04',
+       'tempair_05', 'tempair_06', 'watersoil_01', 'watersoil_02',
+       'watersoil_03', 'watersoil_04', 'watersoil_05', 'watersoil_06',
+       'tempsoil_01', 'tempsoil_02', 'tempsoil_03', 'tempsoil_04',
+       'tempsoil_05', 'tempsoil_06'],
+      dtype='object')
+{'regressor__n_estimators': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7f2714c1f0a0>, 'regressor__min_samples_leaf': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7f2714c1f580>, 'regressor__max_depth': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7f2714c1f730>, 'regressor__max_samples': <scipy.stats._distn_infrastructure.rv_continuous_frozen object at 0x7f2714c1f9d0>, 'classifier__n_estimators': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7f2714c1fcd0>, 'classifier__min_samples_leaf': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7f2714c1ff70>, 'classifier__max_depth': <scipy.stats._distn_infrastructure.rv_discrete_frozen object at 0x7f2714c1fd60>, 'classifier__max_samples': <scipy.stats._distn_infrastructure.rv_continuous_frozen object at 0x7f2714775190>}
+Fitting 5 folds for each of 25 candidates, totalling 125 fits
+ZIR model (split train-test): 25-iter CV
+Random State: 4
+Goodness of Fit (R2): 0.6990762248087569
+Mean Absolute Error (MAE): 0.009193138460821329
+Mean Squared Error (MSE): 0.001192464901981602
+Root Mean Squared Error (RMSE): 0.03453208510909241
+Mean Absolute Percentage Error (MAPE): 108.81
+Accuracy: -8.81

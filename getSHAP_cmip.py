@@ -1,6 +1,6 @@
 # imports
 import sys
-cmip_model = int(sys.argv[1])
+cmip_model = sys.argv[1]
 decade_start = int(sys.argv[2])
 
 import numpy as np

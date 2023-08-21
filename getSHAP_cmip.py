@@ -1,7 +1,7 @@
 # imports
-# Here we go
 import sys
-decade_start = int(sys.argv[1])
+cmip_model = int(sys.argv[1])
+decade_start = int(sys.argv[2])
 
 import numpy as np
 import pandas as pd
@@ -28,7 +28,7 @@ feature_list = pickle.load(open(
 
 # Historical
 output = pd.read_csv(
-    modeldir+'predictions-fldas.csv'
+    modeldir+'predictions-{0}-ssp585-FR.csv'.format(cmip_model)
 )
 output['fips'] = output.fips.astype(str).str.zfill(5)
 output['pred_tot'] = output.pred * output.Total
@@ -68,8 +68,8 @@ decade_range = np.arange(decade_start,decade_start+10)
 output = output[output.year.isin(decade_range)]
 output = output.reset_index(drop=True)
 
-# shap_class = saveShapleys(output, feature_list, model.classifier_)
-# shap_class.to_csv(modeldir+'shap_fldas_class_{0}-{1}.csv'.format(decade_start,output.year.max()),index=False)
+shap_class = saveShapleys(output, feature_list, model.classifier_)
+shap_class.to_csv(modeldir+'shap_{0}_class_{1}-{2}.csv'.format(cmip_model, decade_start,output.year.max()),index=False)
 
 shap_regr = saveShapleys(output, feature_list, model.regressor_)
-shap_regr.to_csv(modeldir+'shap_fldas_regr_{0}-{1}.csv'.format(decade_start,output.year.max()),index=False)
+shap_regr.to_csv(modeldir+'shap_{0}_regr_{1}-{2}.csv'.format(cmip_model, decade_start,output.year.max()),index=False)

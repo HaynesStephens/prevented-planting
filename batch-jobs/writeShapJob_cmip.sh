@@ -4,9 +4,9 @@ cmip_model="BCC-CSM2-MR"
 
 template="#!/bin/bash
 
-#SBATCH --job-name=ShapJob_\$CMIP_MODEL\_\$YEAR
-#SBATCH --output=ShapJob_\$CMIP_MODEL\_\$YEAR.out
-#SBATCH --error=ShapJob_\$CMIP_MODEL\_\$YEAR.err
+#SBATCH --job-name=ShapJob_\$CMIP_MODEL_\$YEAR
+#SBATCH --output=ShapJob_\$CMIP_MODEL_\$YEAR.out
+#SBATCH --error=ShapJob_\$CMIP_MODEL_\$YEAR.err
 #SBATCH --ntasks=1
 #SBATCH --partition=broadwl
 #SBATCH --cpus-per-task=1
@@ -22,7 +22,7 @@ python /home/haynes13/code/prevented-planting/getSHAP_cmip.py \$CMIP_MODEL \$YEA
 years=(2023)
 
 for year in "${years[@]}"; do
-    script="ShapJob_\$CMIP_MODEL\_${year}.sbatch"
+    script="ShapJob_${cmip_model}_${year}.sbatch"
     echo -e "$template" | sed -e "s/\$YEAR/$year/g" -e "s/\$CMIP_MODEL/$cmip_model/g" > "$script"
     chmod +x "$script"
     

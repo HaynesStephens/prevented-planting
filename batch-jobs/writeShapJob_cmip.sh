@@ -19,7 +19,7 @@ source activate /home/haynes13/.conda/envs/prevplant
 python /home/haynes13/code/prevented-planting/getSHAP_cmip.py \$CMIP_MODEL \$YEAR
 "
 
-years=(2023)
+years=(2023, 2033, 2043, 2053, 2063, 2073, 2083, 2093)
 
 for year in "${years[@]}"; do
     script="ShapJob_${cmip_model}_${year}.sbatch"

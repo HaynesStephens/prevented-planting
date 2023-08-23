@@ -68,8 +68,8 @@ decade_range = np.arange(decade_start,decade_start+10)
 output = output[output.year.isin(decade_range)]
 output = output.reset_index(drop=True)
 
-shap_class = saveShapleys(output, feature_list, model.classifier_)
-shap_class.to_csv(modeldir+'shap_{0}_class_{1}-{2}.csv'.format(cmip_model, decade_start,output.year.max()),index=False)
+# shap_class = saveShapleys(output, feature_list, model.classifier_)
+# shap_class.to_csv(modeldir+'shap_{0}_class_{1}-{2}.csv'.format(cmip_model, decade_start,output.year.max()),index=False)
 
 shap_regr = saveShapleys(output, feature_list, model.regressor_)
 shap_regr.to_csv(modeldir+'shap_{0}_regr_{1}-{2}.csv'.format(cmip_model, decade_start,output.year.max()),index=False)

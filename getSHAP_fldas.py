@@ -17,7 +17,7 @@ def load_model(modeltype, filename):
     return rf
 
 modeltype = 'ZIR'
-filename = "ZIR-2023-08-22-20-35-39"
+filename = "ZIR-2023-08-24-16-30-10"
 modeldir = '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/'.format(modeltype, filename)
 model = load_model(modeltype, filename)
 

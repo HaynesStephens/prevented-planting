@@ -26,7 +26,7 @@ feature_list = pickle.load(open(
     'rb'
 ))
 
-# Historical
+# Projection output
 output = pd.read_csv(
     modeldir+'predictions-{0}-ssp585-FR.csv'.format(cmip_model)
 )

@@ -20,14 +20,14 @@ if ZIRpart:
     class ZIRpart:
         def __init__(self, rfclass, rfregr):
             def load_model(modeltype, filename):
-                with open('/content/drive/Shareddrives/NRT Practicum - Winter 2022/Prevented Planting/Models/{0}/{1}/model.pkl'.format(modeltype, filename),'rb') as f:
+                with open('/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/model.pkl'.format(modeltype, filename),'rb') as f:
                     rf = pickle.load(f)
                 return rf
             self.classifier_ = load_model('RFclass', rfclass)
             self.regressor_ = load_model('RFregr', rfregr)
 
         def getOutput(self, feature_list):
-            output = pd.read_csv('/content/drive/Shareddrives/NRT Practicum - Winter 2022/Prevented Planting/Data/Processed/traindata-corn-excessmoist.csv')
+            output = pd.read_csv('/project2/moyer/ag_data/prevented-planting/traindata-corn-excessmoist.csv')
             output['fips'] = output.fips.astype(str).str.zfill(5)
             output.loc[output["ppfrac"] > 1.0, "ppfrac"] = 1.0
             state_exc_100lon = ['HI','AK','WA','OR','CA','ID','NV','AZ','MT','WY','UT','CO','NM','AS', 'MP', 'PR', 'DC', 'GU','VI']
@@ -48,8 +48,8 @@ if ZIRpart:
     output = model.getOutput(feature_list)
 else: 
     def load_model(modeltype, filename):
-    with open('/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/model.pkl'.format(modeltype, filename),'rb') as f:
-        rf = pickle.load(f)
+        with open('/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/model.pkl'.format(modeltype, filename),'rb') as f:
+            rf = pickle.load(f)
         return rf
     modeltype = 'ZIR'
     filename = "ZIR-2023-08-25-16-15-12"

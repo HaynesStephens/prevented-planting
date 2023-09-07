@@ -46,8 +46,7 @@ if ZIRpart:
         'watersoil_01', 'watersoil_02', 'watersoil_03', 'watersoil_04', 'watersoil_05', 'watersoil_06']
     print('Loading ZIRpart model.')
     model = ZIRpart('RFclass-2023-09-06-16-07', 'RFregr-2023-09-06-16-08')
-    print('Loading output.')
-    output = model.getOutput(feature_list)
+    modeldir = '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/'.format(modeltype, filename)
 else: 
     def load_model(modeltype, filename):
         with open('/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/model.pkl'.format(modeltype, filename),'rb') as f:
@@ -55,16 +54,15 @@ else:
         return rf
     modeltype = 'ZIR'
     filename = "ZIR-2023-08-25-16-15-12"
-    modeldir = '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/'.format(modeltype, filename)
     model = load_model(modeltype, filename)
+    modeldir = '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/'.format(modeltype, filename)
     feature_list = pickle.load(open( modeldir+'feature_list.pkl', 'rb' ))
-    # Historical
-    output = pd.read_csv(modeldir+'predictions-fldas.csv')
-    output['fips'] = output.fips.astype(str).str.zfill(5)
-    output['pred_tot'] = output.pred * output.Total
 
-
-
+print('Loading output.')
+# Historical
+output = pd.read_csv(modeldir+'predictions-fldas.csv')
+output['fips'] = output.fips.astype(str).str.zfill(5)
+output['pred_tot'] = output.pred * output.Total
 features_df = output[feature_list]
 
 def saveShapleys(input_data, feature_list, model_in):

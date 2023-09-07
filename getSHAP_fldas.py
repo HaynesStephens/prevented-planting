@@ -75,9 +75,9 @@ def saveShapleys(input_data, feature_list, model_in):
     explainer = shap.Explainer(model_in)
 
     print('Getting shap values.')
-    if type(model_in) == sklearn.ensemble._forest.RandomForestClassifier:
+    if str(model.classifier_).split('(')[0] == 'RandomForestClassifier':
         shap_values = explainer(X)[:,:,1]
-    elif type(model_in) == sklearn.ensemble._forest.RandomForestRegressor:
+    elif str(model.classifier_).split('(')[0] == 'RandomForestRegressor':
         # Helper procedure
         if hasattr(explainer, "expected_value"):
             if type(explainer.expected_value) is np.ndarray:

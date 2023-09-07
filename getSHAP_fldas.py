@@ -11,27 +11,57 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklego.meta import ZeroInflatedRegressor
 import shap
 
-def load_model(modeltype, filename):
-  with open('/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/model.pkl'.format(modeltype, filename),'rb') as f:
-    rf = pickle.load(f)
-    return rf
+ZIRpart=True
 
-modeltype = 'ZIR'
-filename = "ZIR-2023-08-25-16-15-12"
-modeldir = '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/'.format(modeltype, filename)
-model = load_model(modeltype, filename)
+if ZIRpart:
+    #intel patch to accelerate ml algorithms
+    from sklearnex import patch_sklearn
+    patch_sklearn()
+    class ZIRpart:
+        def __init__(self, rfclass, rfregr):
+            def load_model(modeltype, filename):
+                with open('/content/drive/Shareddrives/NRT Practicum - Winter 2022/Prevented Planting/Models/{0}/{1}/model.pkl'.format(modeltype, filename),'rb') as f:
+                    rf = pickle.load(f)
+                return rf
+            self.classifier_ = load_model('RFclass', rfclass)
+            self.regressor_ = load_model('RFregr', rfregr)
 
-feature_list = pickle.load(open(
-    modeldir+'feature_list.pkl',
-    'rb'
-))
+        def getOutput(self, feature_list):
+            output = pd.read_csv('/content/drive/Shareddrives/NRT Practicum - Winter 2022/Prevented Planting/Data/Processed/traindata-corn-excessmoist.csv')
+            output['fips'] = output.fips.astype(str).str.zfill(5)
+            output.loc[output["ppfrac"] > 1.0, "ppfrac"] = 1.0
+            state_exc_100lon = ['HI','AK','WA','OR','CA','ID','NV','AZ','MT','WY','UT','CO','NM','AS', 'MP', 'PR', 'DC', 'GU','VI']
+            output = output[~output.state.isin(state_exc_100lon)]
+            output['pred_cl'] = self.classifier_.predict(output[feature_list].values)
+            output['pred_re'] = self.regressor_.predict(output[feature_list].values)
+            output['pred'] = output.pred_cl * output.pred_re
+            output['pred_tot'] = output.pred * output.Total
+            return output
+    modeltype = 'ZIRpart'
+    filename = "ZIRpart-tas_pr_sm"
+    feature_list = [
+        'frac_tile_drained', 'drain_class', 'awc_mean', 'om_mean', 'clay_mean',
+        'rain_01', 'rain_02', 'rain_03', 'rain_04', 'rain_05', 'rain_06',
+        'tempair_01', 'tempair_02', 'tempair_03', 'tempair_04', 'tempair_05', 'tempair_06',
+        'watersoil_01', 'watersoil_02', 'watersoil_03', 'watersoil_04', 'watersoil_05', 'watersoil_06']
+    model = ZIRpart('RFclass-2023-09-06-16-07', 'RFregr-2023-09-06-16-08')
+    output = model.getOutput(feature_list)
+else: 
+    def load_model(modeltype, filename):
+    with open('/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/model.pkl'.format(modeltype, filename),'rb') as f:
+        rf = pickle.load(f)
+        return rf
+    modeltype = 'ZIR'
+    filename = "ZIR-2023-08-25-16-15-12"
+    modeldir = '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/'.format(modeltype, filename)
+    model = load_model(modeltype, filename)
+    feature_list = pickle.load(open( modeldir+'feature_list.pkl', 'rb' ))
+    # Historical
+    output = pd.read_csv(modeldir+'predictions-fldas.csv')
+    output['fips'] = output.fips.astype(str).str.zfill(5)
+    output['pred_tot'] = output.pred * output.Total
 
-# Historical
-output = pd.read_csv(
-    modeldir+'predictions-fldas.csv'
-)
-output['fips'] = output.fips.astype(str).str.zfill(5)
-output['pred_tot'] = output.pred * output.Total
+
 
 features_df = output[feature_list]
 

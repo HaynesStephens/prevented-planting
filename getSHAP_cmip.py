@@ -75,9 +75,9 @@ def saveShapleys(input_data, feature_list, model_in):
     explainer = shap.Explainer(model_in)
 
     print('Getting shap values.')
-    if str(model.classifier_).split('(')[0] == 'RandomForestClassifier':
+    if str(model_in).split('(')[0] == 'RandomForestClassifier':
         shap_values = explainer(X)[:,:,1]
-    elif str(model.classifier_).split('(')[0] == 'RandomForestRegressor':
+    elif str(model_in).split('(')[0] == 'RandomForestRegressor':
         # Helper procedure
         if hasattr(explainer, "expected_value"):
             if type(explainer.expected_value) is np.ndarray:
@@ -100,8 +100,8 @@ decade_range = np.arange(decade_start,decade_start+10)
 output = output[output.year.isin(decade_range)]
 output = output.reset_index(drop=True)
 
-shap_class = saveShapleys(output, feature_list, model.classifier_)
-shap_class.to_csv(modeldir+'shap_{0}_class_{1}-{2}.csv'.format(cmip_model, decade_start,output.year.max()),index=False)
+# shap_class = saveShapleys(output, feature_list, model.classifier_)
+# shap_class.to_csv(modeldir+'shap_{0}_class_{1}-{2}.csv'.format(cmip_model, decade_start,output.year.max()),index=False)
 
 shap_regr = saveShapleys(output, feature_list, model.regressor_)
 shap_regr.to_csv(modeldir+'shap_{0}_regr_{1}-{2}.csv'.format(cmip_model, decade_start,output.year.max()),index=False)

@@ -69,10 +69,10 @@ features_df = output[feature_list]
 
 def saveShapleys(input_data, feature_list, model_in):
     print('Model type: ', type(model_in))
-    print('Loading Explainer.')
+    print('Loading TreeExplainer.')
     features_df = input_data[feature_list].copy()
     X = features_df
-    explainer = shap.Explainer(model_in)
+    explainer = shap.TreeExplainer(model_in)
 
     print('Getting shap values.')
     if str(model_in).split('(')[0] == 'RandomForestClassifier':
@@ -100,8 +100,8 @@ decade_range = np.arange(decade_start,decade_start+10)
 output = output[output.year.isin(decade_range)]
 output = output.reset_index(drop=True)
 
-# shap_class = saveShapleys(output, feature_list, model.classifier_)
-# shap_class.to_csv(modeldir+'shap_{0}_class_{1}-{2}.csv'.format(cmip_model, decade_start,output.year.max()),index=False)
+shap_class = saveShapleys(output, feature_list, model.classifier_)
+shap_class.to_csv(modeldir+'shap_{0}_class_{1}-{2}.csv'.format(cmip_model, decade_start,output.year.max()),index=False)
 
 shap_regr = saveShapleys(output, feature_list, model.regressor_)
 shap_regr.to_csv(modeldir+'shap_{0}_regr_{1}-{2}.csv'.format(cmip_model, decade_start,output.year.max()),index=False)

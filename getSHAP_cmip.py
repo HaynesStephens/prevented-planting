@@ -38,14 +38,16 @@ if ZIRpart:
             output['pred_tot'] = output.pred * output.Total
             return output
     modeltype = 'ZIRpart'
-    filename = "ZIRpart-tas_pr_sm"
-    feature_list = [
-        'frac_tile_drained', 'drain_class', 'awc_mean', 'om_mean', 'clay_mean',
-        'rain_01', 'rain_02', 'rain_03', 'rain_04', 'rain_05', 'rain_06',
-        'tempair_01', 'tempair_02', 'tempair_03', 'tempair_04', 'tempair_05', 'tempair_06',
-        'watersoil_01', 'watersoil_02', 'watersoil_03', 'watersoil_04', 'watersoil_05', 'watersoil_06']
+    filename = "ZIRpart-tas_pr_sm_x"
+    feature_list = ['frac_tile_drained', 'lat', 'lon', 
+                    'drain_class', 'awc_mean', 'om_mean', 'clay_mean', 
+                    'rain_01', 'rain_02', 'rain_03', 'rain_04', 'rain_05', 'rain_06', 
+                    'tempair_01', 'tempair_02', 'tempair_03', 'tempair_04', 'tempair_05', 'tempair_06', 
+                    # 'tempairmean_01', 'tempairmean_02', 'tempairmean_03', 'tempairmean_04', 'tempairmean_05', 'tempairmean_06', 
+                    # 'tempairanom_01', 'tempairanom_02', 'tempairanom_03', 'tempairanom_04', 'tempairanom_05', 'tempairanom_06', 
+                    'watersoil_01', 'watersoil_02','watersoil_03', 'watersoil_04', 'watersoil_05', 'watersoil_06']
     print('Loading ZIRpart model.')
-    model = ZIRpart('RFclass-2023-09-06-16-07', 'RFregr-2023-09-06-16-08')
+    model = ZIRpart('RFclass-2023-09-20-12-55', 'RFregr-2023-09-20-12-55')
     modeldir = '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/'.format(modeltype, filename)
 else: 
     def load_model(modeltype, filename):

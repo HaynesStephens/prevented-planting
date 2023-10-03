@@ -26,17 +26,29 @@ if ZIRpart:
             self.classifier_ = load_model('RFclass', rfclass)
             self.regressor_ = load_model('RFregr', rfregr)
 
-        def getOutput(self, feature_list):
-            output = pd.read_csv('/project2/moyer/ag_data/prevented-planting/traindata-corn-excessmoist.csv')
+        def getOutput(self, feature_list, crop='corn', varbase=''):
+            output = pd.read_csv('/project2/moyer/ag_data/prevented-planting/traindata-{0}-excessmoist.csv'.format(crop))
             output['fips'] = output.fips.astype(str).str.zfill(5)
             output.loc[output["ppfrac"] > 1.0, "ppfrac"] = 1.0
             state_exc_100lon = ['HI','AK','WA','OR','CA','ID','NV','AZ','MT','WY','UT','CO','NM','AS', 'MP', 'PR', 'DC', 'GU','VI']
             output = output[~output.state.isin(state_exc_100lon)]
+
+            # Create anoms
+            if varbase != '':
+                varcols = [col for col in output.columns if col.startswith(varbase+'_')]
+                varmean = output.groupby('fips')[varcols].mean().reset_index().rename(columns=dict(zip(varcols, [varbase+'mean_'+f.split('_')[1] for f in varcols])))
+                output = output.merge(varmean, on='fips')
+                for i in range(1,13):
+                    month = str(i).zfill(2)
+                    print(month, varbase+'anom_'+month)
+                    output[varbase+'anom_'+month] = (output[varbase+'_'+month] - output[varbase+'mean_'+month]) / output[varbase+'mean_'+month]
+
             output['pred_cl'] = self.classifier_.predict(output[feature_list].values)
             output['pred_re'] = self.regressor_.predict(output[feature_list].values)
             output['pred'] = output.pred_cl * output.pred_re
             output['pred_tot'] = output.pred * output.Total
             return output
+    crop = 'corn_and_soy'
     modeltype = 'ZIRpart'
     filename = "ZIRpart-CornSoy"
     feature_list = ['frac_tile_drained', 'lat', 'lon', 

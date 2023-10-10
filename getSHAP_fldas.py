@@ -50,7 +50,7 @@ if ZIRpart:
             return output
     crop = 'corn_and_soy'
     modeltype = 'ZIRpart'
-    filename = "ZIRpart-CornSoy"
+    filename = "ZIRpart_cornsoy_PPreq"
     feature_list = ['frac_tile_drained', 'lat', 'lon', 
                     'drain_class', 'awc_mean', 'om_mean', 'clay_mean', 'ksat_mean',
                     'rain_01', 'rain_02', 'rain_03', 'rain_04', 'rain_05', 'rain_06', 
@@ -59,7 +59,7 @@ if ZIRpart:
                     # 'tempairanom_01', 'tempairanom_02', 'tempairanom_03', 'tempairanom_04', 'tempairanom_05', 'tempairanom_06', 
                     'watersoil_01', 'watersoil_02','watersoil_03', 'watersoil_04', 'watersoil_05', 'watersoil_06']
     print('Loading ZIRpart model.')
-    model = ZIRpart('RFclass-2023-10-03-14-55', 'RFregr-2023-10-03-15-01')
+    model = ZIRpart('RFclass-2023-10-04-11-25', 'RFregr-2023-10-04-11-31')
     modeldir = '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/'.format(modeltype, filename)
 else: 
     def load_model(modeltype, filename):

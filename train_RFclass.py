@@ -109,7 +109,7 @@ if __name__=='__main__':
 
 
     criterion='gini'
-    rf = RandomForestClassifier(random_state = random_state, criterion=criterion)
+    rf = RandomForestClassifier
 
     df_out = getTunedModel_leave1out(rf, random_state, df, features, labels)
 

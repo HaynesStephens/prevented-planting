@@ -109,7 +109,7 @@ if __name__=='__main__':
 
 
     criterion='squared_error'
-    rf = RandomForestRegressor(random_state = random_state, criterion=criterion)
+    rf = RandomForestRegressor
 
     df_out = getTunedModel_leave1out(rf, random_state, df, features, labels)
 

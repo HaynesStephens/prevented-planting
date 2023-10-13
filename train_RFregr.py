@@ -42,8 +42,8 @@ def getTunedModel_leave1out( baseModel, random_state, df_in, features_in, labels
                                 max_samples = params['max_samples'],
                                 min_samples_leaf = params['min_samples_leaf'])
             model_i.fit(features_in[~df_in.year.isin([year])], labels_in[~df_in.year.isin([year])])
-            train_score = metrics.accuracy_score(labels_in[~df_in.year.isin([year])], model_i.predict(features_in[~df_in.year.isin([year])]))
-            test_score = metrics.accuracy_score(labels_in[df_in.year.isin([year])], model_i.predict(features_in[df_in.year.isin([year])]))
+            train_score = metrics.mean_squared_error(labels_in[~df_in.year.isin([year])], model_i.predict(features_in[~df_in.year.isin([year])]))
+            test_score = metrics.mean_squared_error(labels_in[df_in.year.isin([year])], model_i.predict(features_in[df_in.year.isin([year])]))
             print('Param iter.: {0} |'.format(i), 'Train: {0:.2f} |'.format(train_score), 'Test: {0:.2f}'.format(test_score))
             list_out.append(dict(year = year, param_run = i, n_estimators = params['n_estimators'], max_depth=params['max_depth'],
                                  max_samples = params['max_samples'], min_samples_leaf = params['min_samples_leaf'],

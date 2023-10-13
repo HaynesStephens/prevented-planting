@@ -35,12 +35,12 @@ def getTunedModel_leave1out( baseModel, random_state, df_in, features_in, labels
         param_grid = list(ParameterSampler(random_grid, n_iter=25, random_state=random_state))
         for i, params in enumerate(param_grid):
             # Create a model with set of params
-            model_i = RandomForestClassifier(random_state = random_state,
-                                            criterion=criterion,
-                                            n_estimators = params['n_estimators'],
-                                            max_depth=params['max_depth'],
-                                            max_samples = params['max_samples'],
-                                            min_samples_leaf = params['min_samples_leaf'])
+            model_i = baseModel(random_state = random_state,
+                                criterion=criterion,
+                                n_estimators = params['n_estimators'],
+                                max_depth=params['max_depth'],
+                                max_samples = params['max_samples'],
+                                min_samples_leaf = params['min_samples_leaf'])
             model_i.fit(features_in[~df_in.year.isin([year])], labels_in[~df_in.year.isin([year])])
             train_score = metrics.accuracy_score(labels_in[~df_in.year.isin([year])], model_i.predict(features_in[~df_in.year.isin([year])]))
             test_score = metrics.accuracy_score(labels_in[df_in.year.isin([year])], model_i.predict(features_in[df_in.year.isin([year])]))

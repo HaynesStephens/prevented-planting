@@ -34,11 +34,11 @@ def getTunedModel_leave1out( baseModel, random_state, df_in, features_in, labels
 
     list_out = []
 
-    years = np.arange(1996,2000)
+    years = np.arange(1996,2023)
     for year in years:
         print('Year: {0}'.format(year))
         param_grid = list(ParameterSampler(random_grid, n_iter=25, random_state=random_state))
-        for i, params in enumerate(param_grid[:5]):
+        for i, params in enumerate(param_grid):
             # Create a model with set of params
             model_i = baseModel(random_state = random_state,
                                 criterion=criterion,

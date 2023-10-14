@@ -5,6 +5,11 @@ import datetime
 import pytz
 import pickle
 import os
+#intel patch to accelerate ml algorithms
+from sklearnex import patch_sklearn
+patch_sklearn()
+#
+import sklearn
 from sklearn import metrics
 from sklearn.svm import SVC
 from sklearn.linear_model import LinearRegression

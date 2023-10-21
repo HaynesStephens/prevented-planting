@@ -68,7 +68,7 @@ if __name__=='__main__':
 
     random_state = 4
 
-    df = pd.read_csv('/project2/moyer/ag_data/prevented-planting/traindata-corn-excessmoist.csv')
+    df = pd.read_csv('/project2/moyer/ag_data/prevented-planting/traindata-soy-excessmoist.csv')
     df['fips'] = df.fips.astype(str).str.zfill(5)
 
     # Set values above 1.0 to 1.0
@@ -85,6 +85,7 @@ if __name__=='__main__':
     df = df[~df.state.isin(state_exc_100lon)]
 
     print(len(df))
+    # Filter to counties with at least one occurrence of PP
     df = df[df.fips.isin(df[df.ppfrac>0.0].fips.unique())]
     print(len(df))
 
@@ -111,7 +112,6 @@ if __name__=='__main__':
     print(df_features.columns)
     feature_list=list(df_features.columns)
     features=np.array(df_features)
-
 
     criterion='squared_error'
     rf = RandomForestRegressor

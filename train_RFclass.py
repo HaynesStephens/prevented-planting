@@ -20,7 +20,20 @@ from scipy.stats import uniform as sp_randFloat
 from scipy.stats import randint as sp_randInt
 from sklearn.model_selection import ParameterSampler
 
-def getTunedModel_leave1out( baseModel, random_state, df_in, features_in, labels_in ):
+def getTunedModel_leave1out(baseModel, random_state, df_in, features_in, labels_in):
+    """
+    Trains a random forest classifier with hyperparameters tuned using a leave-one-out cross-validation approach.
+
+    Args:
+        baseModel (sklearn.ensemble.RandomForestClassifier): The base random forest classifier to use.
+        random_state (int): The random state to use for reproducibility.
+        df_in (pandas.DataFrame): The input dataframe containing the features and labels.
+        features_in (numpy.ndarray): The input features.
+        labels_in (numpy.ndarray): The input labels.
+
+    Returns:
+        pandas.DataFrame: A dataframe containing the hyperparameters and performance metrics for each iteration.
+    """
     n_estimators = sp_randInt(10, 801)
     max_samples = sp_randFloat()
     min_samples_leaf = sp_randInt(1, 51)
@@ -30,7 +43,6 @@ def getTunedModel_leave1out( baseModel, random_state, df_in, features_in, labels
                    'min_samples_leaf': min_samples_leaf,
                    'max_samples': max_samples,
                    'max_depth':max_depth}
-    #print(random_grid)
 
     list_out = []
 
@@ -59,6 +71,10 @@ def getTunedModel_leave1out( baseModel, random_state, df_in, features_in, labels
 
 # Create unique filename for model run.
 def get_file_id():
+    """
+    Returns a string representing the current date and time in the US/Pacific timezone
+    formatted as 'YYYY-MM-DD-HH-MM'.
+    """
     now = datetime.datetime.now(pytz.timezone('US/Pacific'))
     fileid = '{0}-{1}-{2}-{3}-{4}'.format(str(now.year).zfill(4), str(now.month).zfill(2), str(now.day).zfill(2),
                                           str(now.hour).zfill(2), str(now.minute).zfill(2))

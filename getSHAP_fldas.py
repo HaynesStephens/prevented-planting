@@ -87,7 +87,7 @@ def saveShapleys(model_in, feature_list, input_data, bkg_data=None):
     if bkg_data is None:
         explainer = shap.TreeExplainer(model_in, feature_perturbation = "tree_path_dependent")
     else:
-        explainer = shap.TreeExplainer(model_in, data = bkg_data[feature_list], feature_perturbation = "interventional")
+        explainer = shap.TreeExplainer(model_in, data = bkg_data[feature_list].values, feature_perturbation = "interventional")
 
     print('Getting shap values.')
     if str(model_in).split('(')[0] == 'RandomForestClassifier':

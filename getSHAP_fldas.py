@@ -85,8 +85,10 @@ def saveShapleys(model_in, feature_list, input_data, bkg_data=None):
     features_df = input_data[feature_list].copy()
     X = features_df
     if bkg_data is None:
+        print('SHAP values from the conditional distribution.')
         explainer = shap.TreeExplainer(model_in, feature_perturbation = "tree_path_dependent")
     else:
+        print('SHAP values from the marginal distribution.')
         # Seems to work whether bkg_data is a df or a numpy array, but the df is quicker (~13%).
         explainer = shap.TreeExplainer(model_in, data = bkg_data[feature_list], feature_perturbation = "interventional")
 
@@ -121,5 +123,5 @@ input_data = input_data.reset_index(drop=True)
 # shap_class.to_csv(modeldir+'shap_fldas_class_{0}-{1}_bkg.csv'.format(decade_start,input_data.year.max()),index=False)
 
 bkg_data_regr = output[output.pred>0].sample(3000, random_state=123).reset_index(drop=True)
-shap_regr = saveShapleys(model.classifier_, feature_list, input_data, bkg_data=bkg_data_regr)
+shap_regr = saveShapleys(model.regressor_, feature_list, input_data, bkg_data=bkg_data_regr)
 # shap_regr.to_csv(modeldir+'shap_fldas_regr_{0}-{1}_bkg.csv'.format(decade_start,input_data.year.max()),index=False)

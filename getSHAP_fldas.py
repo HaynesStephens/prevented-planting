@@ -48,9 +48,9 @@ if ZIRpart:
             output['pred'] = output.pred_cl * output.pred_re
             output['pred_tot'] = output.pred * output.Total
             return output
-    crop = 'soy'
+    crop = 'corn'
     modeltype = 'ZIRpart'
-    filename = "ZIRpart_soy_ppreq"
+    filename = "ZIRpart_corn_ppreq"
     feature_list = ['frac_tile_drained', 'lat', 'lon', 
                     'drain_class', 'awc_mean', 'om_mean', 'clay_mean', 'ksat_mean',
                     'rain_01', 'rain_02', 'rain_03', 'rain_04', 'rain_05', 'rain_06', 
@@ -59,7 +59,7 @@ if ZIRpart:
                     # 'tempairanom_01', 'tempairanom_02', 'tempairanom_03', 'tempairanom_04', 'tempairanom_05', 'tempairanom_06', 
                     'watersoil_01', 'watersoil_02','watersoil_03', 'watersoil_04', 'watersoil_05', 'watersoil_06']
     print('Loading ZIRpart model.')
-    model = ZIRpart('RFclass-2023-10-21-13-56', 'RFregr-2023-10-21-13-59')
+    model = ZIRpart('RFclass-2023-10-14-11-01', 'RFregr-2023-10-14-11-27')
     modeldir = '/project2/moyer/ag_data/prevented-planting/Models/{0}/{1}/'.format(modeltype, filename)
 else: 
     def load_model(modeltype, filename):
@@ -84,7 +84,7 @@ def saveShapleys(input_data, feature_list, model_in):
     print('Loading TreeExplainer.')
     features_df = input_data[feature_list].copy()
     X = features_df
-    explainer = shap.TreeExplainer(model_in)
+    explainer = shap.TreeExplainer(model_in, data = X, feature_perturbation = "interventional")
 
     print('Getting shap values.')
     if str(model_in).split('(')[0] == 'RandomForestClassifier':
@@ -113,7 +113,7 @@ output = output[output.year.isin(decade_range)]
 output = output.reset_index(drop=True)
 
 shap_class = saveShapleys(output, feature_list, model.classifier_)
-shap_class.to_csv(modeldir+'shap_fldas_class_{0}-{1}.csv'.format(decade_start,output.year.max()),index=False)
+shap_class.to_csv(modeldir+'shap_fldas_class_{0}-{1}_bkgdata.csv'.format(decade_start,output.year.max()),index=False)
 
 shap_regr = saveShapleys(output, feature_list, model.regressor_)
-shap_regr.to_csv(modeldir+'shap_fldas_regr_{0}-{1}.csv'.format(decade_start,output.year.max()),index=False)
+shap_regr.to_csv(modeldir+'shap_fldas_regr_{0}-{1}_bkgdata.csv'.format(decade_start,output.year.max()),index=False)

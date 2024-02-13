@@ -94,13 +94,13 @@ def saveShapleys(model_in, feature_list, input_data, bkg_data=None):
 
     print('Getting shap values.')
     if str(model_in).split('(')[0] == 'RandomForestClassifier':
-        shap_values = explainer(X)[:,:,1]
+        shap_values = explainer(X, check_additivity=False)[:,:,1]
     elif str(model_in).split('(')[0] == 'RandomForestRegressor':
         # Helper procedure
         if hasattr(explainer, "expected_value"):
             if type(explainer.expected_value) is np.ndarray:
                 explainer.expected_value = explainer.expected_value.mean()
-        shap_values = explainer(X)
+        shap_values = explainer(X, check_additivity=False)
     else:
         raise( AssertionError("ERROR: Wrong model type used."))
     
